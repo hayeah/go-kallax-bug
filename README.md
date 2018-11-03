@@ -21,6 +21,12 @@ after update obj.Data2: 2432000000440000000753330053000000047637be03a55d777fefcd
 
 We expect `Data` and `Data2` to be the same after update (since only `Counter` is updated).
 
+# Workaround
+
+This problem seems to manifest when using `github.com/lib/pq`.
+
+Change to `github.com/jackc/pgx/stdlib`, and the problem goes away.
+
 # Create Database
 
 ```
