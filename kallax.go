@@ -34,6 +34,8 @@ func (r *TestModel) ColumnAddress(col string) (interface{}, error) {
 		return (*kallax.NumericID)(&r.ID), nil
 	case "data":
 		return types.Slice(&r.Data), nil
+	case "data2":
+		return types.Slice(&r.Data2), nil
 	case "counter":
 		return &r.Counter, nil
 
@@ -49,6 +51,8 @@ func (r *TestModel) Value(col string) (interface{}, error) {
 		return r.ID, nil
 	case "data":
 		return types.Slice(r.Data), nil
+	case "data2":
+		return types.Slice(r.Data2), nil
 	case "counter":
 		return r.Counter, nil
 
@@ -339,6 +343,20 @@ func (q *TestModelQuery) FindByData(v ...byte) *TestModelQuery {
 	return q.Where(kallax.ArrayContains(Schema.TestModel.Data, values...))
 }
 
+// FindByData2 adds a new filter to the query that will require that
+// the Data2 property contains all the passed values; if no passed values,
+// it will do nothing.
+func (q *TestModelQuery) FindByData2(v ...byte) *TestModelQuery {
+	if len(v) == 0 {
+		return q
+	}
+	values := make([]interface{}, len(v))
+	for i, val := range v {
+		values[i] = val
+	}
+	return q.Where(kallax.ArrayContains(Schema.TestModel.Data2, values...))
+}
+
 // FindByCounter adds a new filter to the query that will require that
 // the Counter property is equal to the passed value.
 func (q *TestModelQuery) FindByCounter(cond kallax.ScalarCond, v int64) *TestModelQuery {
@@ -461,6 +479,7 @@ type schemaTestModel struct {
 	*kallax.BaseSchema
 	ID      kallax.SchemaField
 	Data    kallax.SchemaField
+	Data2   kallax.SchemaField
 	Counter kallax.SchemaField
 }
 
@@ -477,10 +496,12 @@ var Schema = &schema{
 			true,
 			kallax.NewSchemaField("id"),
 			kallax.NewSchemaField("data"),
+			kallax.NewSchemaField("data2"),
 			kallax.NewSchemaField("counter"),
 		),
 		ID:      kallax.NewSchemaField("id"),
 		Data:    kallax.NewSchemaField("data"),
+		Data2:   kallax.NewSchemaField("data2"),
 		Counter: kallax.NewSchemaField("counter"),
 	},
 }

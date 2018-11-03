@@ -20,6 +20,14 @@
           "Unique": false
         },
         {
+          "Name": "data2",
+          "Type": "bytea",
+          "PrimaryKey": false,
+          "Reference": null,
+          "NotNull": true,
+          "Unique": false
+        },
+        {
           "Name": "counter",
           "Type": "bigint",
           "PrimaryKey": false,
