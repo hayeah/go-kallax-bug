@@ -32,3 +32,7 @@ Run all migrations:
 ```
 kallax migrate up --dsn 'localhost/kallax_test?sslmode=disable' --all
 ```
+
+# TODO
+
+- try a different DB driver?

@@ -7,7 +7,8 @@ import (
 	"log"
 
 	"github.com/kr/pretty"
-	_ "github.com/lib/pq"
+	// _ "github.com/lib/pq"
+	_ "github.com/jackc/pgx/stdlib"
 	kallax "gopkg.in/src-d/go-kallax.v1"
 )
 
@@ -25,17 +26,24 @@ func init() {
 	var err error
 
 	dbURL := "postgres://localhost/kallax_test?sslmode=disable"
+	// pgconfig, err := pgx.ParseConnectionString(dbURL)
+	// if err != nil {
+	// 	log.Fatalln("db", err)
+	// }
 
-	dbconn, err = sql.Open("postgres", dbURL)
+	// dbconn, err = pgx.Connect(pgconfig)
+
+	dbconn, err = sql.Open("pgx", dbURL)
+	// dbconn, err = sql.Open("postgres", dbURL)
 	if err != nil {
 		log.Fatalln("db", err)
 	}
-
 }
 
 // localhost/kallax_test?sslmode=disable
 func test() (err error) {
 	store := NewTestModelStore(dbconn)
+	store = store.DisableCacher()
 
 	var data [32]byte
 	var data2 [32]byte
