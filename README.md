@@ -1,3 +1,5 @@
+See [workaround](https://github.com/src-d/go-kallax/issues/298#issuecomment-435564130)
+
 # Build & Run
 
 ```
