@@ -43,7 +43,6 @@ func init() {
 // localhost/kallax_test?sslmode=disable
 func test() (err error) {
 	store := NewTestModelStore(dbconn)
-	store = store.DisableCacher()
 
 	var data [32]byte
 	var data2 [32]byte
