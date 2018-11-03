@@ -10,7 +10,7 @@
   version = "v1.0"
 
 [[projects]]
-  digest = "1:8dfbec76b4834d96c37ba4c4969fc47c9a15e67c5a7eecfa031fbe67dab50429"
+  digest = "1:0d1dda2d304932fb14e5052312b455c2b421fcff046c0967887c4da5b66c62e4"
   name = "github.com/jackc/pgx"
   packages = [
     ".",
@@ -19,6 +19,7 @@
     "pgio",
     "pgproto3",
     "pgtype",
+    "stdlib",
   ]
   pruneopts = "UT"
   revision = "89f1e6ac7276b61d885db5e5aed6fcbedd1c7e31"
@@ -106,7 +107,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/jackc/pgx",
+    "github.com/jackc/pgx/stdlib",
     "github.com/kr/pretty",
     "github.com/lib/pq",
     "gopkg.in/src-d/go-kallax.v1",

@@ -33,9 +33,9 @@ func (r *TestModel) ColumnAddress(col string) (interface{}, error) {
 	case "id":
 		return (*kallax.NumericID)(&r.ID), nil
 	case "data":
-		return types.Slice(&r.Data), nil
+		return &r.Data, nil
 	case "data2":
-		return types.Slice(&r.Data2), nil
+		return &r.Data2, nil
 	case "counter":
 		return &r.Counter, nil
 
@@ -50,9 +50,9 @@ func (r *TestModel) Value(col string) (interface{}, error) {
 	case "id":
 		return r.ID, nil
 	case "data":
-		return types.Slice(r.Data), nil
+		return r.Data, nil
 	case "data2":
-		return types.Slice(r.Data2), nil
+		return r.Data2, nil
 	case "counter":
 		return r.Counter, nil
 
@@ -330,31 +330,15 @@ func (q *TestModelQuery) FindByID(v ...int64) *TestModelQuery {
 }
 
 // FindByData adds a new filter to the query that will require that
-// the Data property contains all the passed values; if no passed values,
-// it will do nothing.
-func (q *TestModelQuery) FindByData(v ...byte) *TestModelQuery {
-	if len(v) == 0 {
-		return q
-	}
-	values := make([]interface{}, len(v))
-	for i, val := range v {
-		values[i] = val
-	}
-	return q.Where(kallax.ArrayContains(Schema.TestModel.Data, values...))
+// the Data property is equal to the passed value.
+func (q *TestModelQuery) FindByData(v byte) *TestModelQuery {
+	return q.Where(kallax.Eq(Schema.TestModel.Data, v))
 }
 
 // FindByData2 adds a new filter to the query that will require that
-// the Data2 property contains all the passed values; if no passed values,
-// it will do nothing.
-func (q *TestModelQuery) FindByData2(v ...byte) *TestModelQuery {
-	if len(v) == 0 {
-		return q
-	}
-	values := make([]interface{}, len(v))
-	for i, val := range v {
-		values[i] = val
-	}
-	return q.Where(kallax.ArrayContains(Schema.TestModel.Data2, values...))
+// the Data2 property is equal to the passed value.
+func (q *TestModelQuery) FindByData2(v byte) *TestModelQuery {
+	return q.Where(kallax.Eq(Schema.TestModel.Data2, v))
 }
 
 // FindByCounter adds a new filter to the query that will require that

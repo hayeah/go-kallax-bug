@@ -1,5 +1,0 @@
-BEGIN;
-
-ALTER TABLE test_models DROP COLUMN data2;
-
-COMMIT;

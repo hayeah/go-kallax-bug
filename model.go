@@ -7,17 +7,51 @@ import (
 	"log"
 
 	"github.com/kr/pretty"
-	// _ "github.com/lib/pq"
+	_ "github.com/lib/pq"
+
+	"database/sql/driver"
+
 	_ "github.com/jackc/pgx/stdlib"
 	kallax "gopkg.in/src-d/go-kallax.v1"
 )
 
+// ByteArray represents a byte array `bytea`.
+type ByteArray []byte
+
+// Scan implements the sql.Scanner interface.
+func (a *ByteArray) Scan(src interface{}) error {
+	switch src := src.(type) {
+	case []byte:
+		// lib/pq reuses buffer. Need to copy instead.
+		// *(*[]byte)(a) = src
+		srcCopy := make([]byte, len(src), len(src))
+		copy(srcCopy, src)
+		*a = srcCopy
+		return nil
+	case string:
+		*a = []byte(src)
+		return nil
+	case nil:
+		*a = nil
+		return nil
+	}
+
+	return fmt.Errorf("kallax: cannot convert %T to ByteArray", src)
+}
+
+// Value implements the driver.Valuer interface.
+func (a ByteArray) Value() (driver.Value, error) {
+	return ([]byte)(a), nil
+}
+
 type TestModel struct {
 	kallax.Model `table:"test_models"`
 	ID           int64 `pk:"autoincr"`
-	Data         []byte
-	Data2        []byte
-	Counter      int64
+	// Data         []byte
+	// Data2        []byte
+	Data    ByteArray `sqltype:"bytea"`
+	Data2   ByteArray `sqltype:"bytea"`
+	Counter int64
 }
 
 var dbconn *sql.DB
@@ -33,8 +67,8 @@ func init() {
 
 	// dbconn, err = pgx.Connect(pgconfig)
 
-	dbconn, err = sql.Open("pgx", dbURL)
-	// dbconn, err = sql.Open("postgres", dbURL)
+	// dbconn, err = sql.Open("pgx", dbURL)
+	dbconn, err = sql.Open("postgres", dbURL)
 	if err != nil {
 		log.Fatalln("db", err)
 	}
